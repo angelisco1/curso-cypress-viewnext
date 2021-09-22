@@ -36,13 +36,13 @@ describe('Navegar por el DOM', () => {
       })
   })
 
-  it('comprueba que la tabla existe', () => {
+  xit('comprueba que la tabla existe', () => {
     cy.visit('https://www.w3schools.com/html/html_tables.asp')
     cy.get('#customers')
       .should('exist')
   })
 
-  it('comprueba que la tabla tiene 7 filas', () => {
+  xit('comprueba que la tabla tiene 7 filas', () => {
     cy.visit('https://www.w3schools.com/html/html_tables.asp')
 
     cy.get('#customers > tbody')
@@ -58,7 +58,7 @@ describe('Navegar por el DOM', () => {
       .should('have.length', 7)
   })
 
-  it('comprueba que la última fila tiene el número de celdas correcto', () => {
+  xit('comprueba que la última fila tiene el número de celdas correcto', () => {
     cy.visit('https://www.w3schools.com/html/html_tables.asp')
 
     cy.get('#customers > tbody > tr')
@@ -67,7 +67,7 @@ describe('Navegar por el DOM', () => {
       .should('have.length', 3)
   })
 
-  it('comprueba que después de la quinta fila, hay dos filas más', () => {
+  xit('comprueba que después de la quinta fila, hay dos filas más', () => {
     cy.visit('https://www.w3schools.com/html/html_tables.asp')
 
     let numFilas = 0
@@ -83,7 +83,7 @@ describe('Navegar por el DOM', () => {
       })
   })
 
-  it('comprueba que todas las celdas tienen contenido', () => {
+  xit('comprueba que todas las celdas tienen contenido', () => {
     cy.visit('https://www.w3schools.com/html/html_tables.asp')
 
     cy.get('#customers td') // [td1, td2, td3, ...]
@@ -92,27 +92,43 @@ describe('Navegar por el DOM', () => {
       })
   })
 
-  it('[retry-ability] encuentra el botón que aparece a los 3.5seg', () => {
+  xit('[retry-ability] encuentra el botón que aparece a los 3.5seg', () => {
     cy.visit('http://localhost:8080')
     cy.get('#btn-lazy-3500')
       .should('be.visible')
       .and('have.text', 'Soy un botón perezoso')
   })
 
-  it('[retry-ability] no encuentra el botón que aparece a los 5.5seg', () => {
+  xit('[retry-ability] no encuentra el botón que aparece a los 5.5seg', () => {
     cy.visit('http://localhost:8080')
 
     cy.get('#btn-lazy-5500')
       .should('not.exist')
   })
 
-  it('[retry-ability] encuentra el botón que aparece a los 5.5seg (aumentando el timeout)', () => {
+  xit('[retry-ability] encuentra el botón que aparece a los 5.5seg (aumentando el timeout)', () => {
     cy.visit('http://localhost:8080')
 
     cy.get('#btn-lazy-5500', {
       timeout: 5800
     })
       .should('exist')
+  })
+
+
+
+  it('[encadenar 3 condiciones] la tabla existe, tiene 7 filas, y la ultima fila tiene 3 celdas', () => {
+    cy.visit('https://www.w3schools.com/html/html_tables.asp')
+
+    cy.get('#customers')
+      .should('exist')
+      .find('tr')
+      .should('have.length', 7)
+      .last()
+      // .children()
+      .find('td')
+      .should('have.length', 3)
+
   })
 
 });
