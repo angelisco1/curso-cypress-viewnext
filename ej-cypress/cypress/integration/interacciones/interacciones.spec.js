@@ -323,7 +323,7 @@ describe('Interacciones', () => {
       .trigger('mouseup')
   })
 
-  it('creamos cookie y comprobamos que se ha creado', () => {
+  xit('creamos cookie y comprobamos que se ha creado', () => {
     cy.visit('http://localhost:8080')
 
     cy.setCookie('mi-cookie', '1234')
@@ -342,6 +342,97 @@ describe('Interacciones', () => {
         const cookie = cookies[0]
         expect(cookie.value).to.be.eq('5678')
       })
+  })
+
+  xit('el mensaje del alert es Hola mundo!!!', () => {
+    cy.visit('http://localhost:8080')
+
+    cy.get('#btn-alert')
+      .click()
+
+    cy.on('window:alert', (texto) => {
+      expect(texto).to.be.eq('Hola mundo!!!')
+    })
+  })
+
+  xit('debería eleminirse el mensaje si aceptamos el popup', () => {
+    cy.visit('http://localhost:8080')
+
+    cy.get('#btn-confirm')
+      .click()
+
+    cy.on('window:confirm', () => {
+      return true // Engañamos al navegador y cambiamos la funcionalidad del confirm por esta función que devuelve un true (equivale a pulsar el botón de Aceptar)
+    })
+
+    cy.get('#confirm-nombre')
+      .should('be.empty')
+  })
+
+  xit('debería mostrarse nuestro nombre cuando lo escribimos en el popup prompt', () => {
+    cy.window()
+      .then((win) => {
+        cy.stub(win, 'prompt').returns('Ángel')
+      })
+
+    cy.get('#btn-prompt')
+      .click()
+
+    cy.get('#prompt-nombre')
+      .should('have.text', 'Ángel')
+
+    cy.screenshot('aplicacion')
+
+    cy.get('#caja-nombre')
+      .screenshot('informacion-nombre', {
+        blackout: ['#prompt-nombre', '#mensaje-prompt']
+      })
+  })
+
+  it('si te logueas con los datos correctos vas al inicio', () => {
+    cy.visit('http://localhost:8080/login')
+
+    cy.fixture('login.json')
+      .then(datos => {
+        const usuario1 = datos.usuario1
+
+        cy.get('[name="email"]')
+          .type(usuario1.email)
+
+        cy.get('[name="password"]')
+          .type(usuario1.pass)
+
+        cy.get('[type="submit"]')
+          .click()
+
+        cy.get('h1')
+          .should('have.text', 'Bienvenido a la página')
+      })
+  })
+
+  it('si te logueas con los datos incorrectos vas al login', () => {
+    cy.visit('http://localhost:8080/login')
+
+    cy.fixture('login.json')
+      .then(datos => {
+
+        const usuario2 = datos.usuario2
+
+        cy.get('[name="email"]')
+          .type(usuario2.email)
+
+        cy.get('[name="password"]')
+          .type(usuario2.pass)
+
+        cy.get('[type="submit"]')
+          .click()
+
+        cy.location('pathname')
+          .should('equal', '/login')
+
+      })
+
+
   })
 
 });

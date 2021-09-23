@@ -6,12 +6,18 @@
   "scripts": {
     "test": "cypress open",
     "start": "npx http-server",
-    "start:1": "npx http-server ./web-codigo-secreto"
+    "start:1": "npx http-server ./web-codigo-secreto",
+    "start:2": "npx http-server ./popups",
+    "start:3": "node ./pagina-fixtures/app.js",
+    "start:4": "node ./api-tiempo/app.js",
+    "start:5": "npx http-server ./condicional",
+    "cy:run": "cypress run"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cypress": "^8.4.1"
+    "cypress": "^8.4.1",
+    "express": "^4.17.1"
   }
 }

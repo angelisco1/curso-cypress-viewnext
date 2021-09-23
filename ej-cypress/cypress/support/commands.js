@@ -23,3 +23,21 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+
+Cypress.Commands.add('submitBtn', () => {
+  return cy.get('[type="submit"]')
+          .click()
+})
+
+Cypress.Commands.add('login', (email, pass) => {
+  cy.rellenarCampo('email', email)
+  cy.rellenarCampo('password', pass)
+
+  return cy.submitBtn()
+})
+
+Cypress.Commands.add('rellenarCampo', (campo, valor) => {
+  return cy.get(`[name="${campo}"]`)
+          .type(valor)
+})
